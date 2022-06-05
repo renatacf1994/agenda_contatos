@@ -2,12 +2,12 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'dart:async';
 
-final String contactTable = "contactTable";
-final String idColumn = "idColumn";
-final String nameColumn = "nameColumn";
-final String emailColumn = "emailColumn";
-final String phoneColumn = "phoneColumn";
-final String imgColumn = "imgColumn";
+const String contactTable = "contactTable";
+const String idColumn = "idColumn";
+const String nameColumn = "nameColumn";
+const emailColumn = "emailColumn";
+const String phoneColumn = "phoneColumn";
+const String imgColumn = "imgColumn";
 
 class ContactHelper{
 
