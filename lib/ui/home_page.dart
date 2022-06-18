@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:agenda_contatos/ui/contact_page.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 import '../helpers/contact_helper.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -119,7 +122,14 @@ class _HomePageState extends State<HomePage> {
                         child: Text("Ligar",
                           style: TextStyle(color: Colors.red, fontSize: 20.0),
                         ),
-                        onPressed: (){
+                        onPressed: () async {
+                          final url = "tel:${contacts[index].phone}";
+                          if (await canLaunch(url)) {
+                            await launch(url);
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                          Navigator.pop(context);
                         },
                       ),
                       ),
