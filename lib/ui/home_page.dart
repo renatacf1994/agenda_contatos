@@ -123,12 +123,9 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(color: Colors.red, fontSize: 20.0),
                         ),
                         onPressed: () async {
-                          final url = "tel:${contacts[index].phone}";
-                          if (await canLaunch(url)) {
-                            await launch(url);
-                          } else {
-                            throw 'Could not launch $url';
-                          }
+                          launch("tel:${contacts[index].phone}");
+
+
                           Navigator.pop(context);
                         },
                       ),
