@@ -119,13 +119,11 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                           padding: EdgeInsets.all(10.0),
                       child: FlatButton(
-                        child: Text("Ligar",
+                        child: const Text("Ligar",
                           style: TextStyle(color: Colors.red, fontSize: 20.0),
                         ),
                         onPressed: () async {
-                          launch("tel:${contacts[index].phone}");
-
-
+                          launchUrl(Uri.parse("tel:${contacts[index].phone}"));
                           Navigator.pop(context);
                         },
                       ),
