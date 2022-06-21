@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../helpers/contact_helper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ContactPage extends StatefulWidget {
 
@@ -35,11 +36,11 @@ class _ContactPageState extends State<ContactPage> {
     if(widget.contact == null){
       _editedContact = Contact();
     } else{
-      _editedContact = Contact.fromMap(widget.contact!.toMap());
+      _editedContact = widget.contact!;
 
-      _nameController.text = _editedContact!.name!;
-      _emailController.text = _editedContact!.email!;
-      _phoneController.text = _editedContact!.phone!;
+      _nameController.text = _editedContact!.name ?? "";
+      _emailController.text = _editedContact!.email ?? "";
+      _phoneController.text = _editedContact!.phone ?? "";
     }
   }
 
@@ -78,10 +79,14 @@ class _ContactPageState extends State<ContactPage> {
                         image: DecorationImage(
                             image: _editedContact?.img != null ?
                             FileImage(File(_editedContact!.img!)) as ImageProvider :
-                            const AssetImage("images/person.png")
+                            const AssetImage("images/person.png"),
+                            fit: BoxFit.cover
                         ),
                       ),
                     ),
+                    onTap: (){
+                     _showOptions(context);
+                    },
                   ),
                   TextField(
                     controller: _nameController,
@@ -151,4 +156,72 @@ class _ContactPageState extends State<ContactPage> {
       return Future.value(true);
     }
   }
+
+  void _showOptions(BuildContext context){
+    showModalBottomSheet(
+        context: context,
+        builder: (context){
+          return BottomSheet(
+              onClosing: (){},
+              builder: (context){
+                return Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: FlatButton(
+                          child: const Text("Câmera",
+                            style: TextStyle(color: Colors.blue, fontSize: 20.0),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            ImagePicker().pickImage(source: ImageSource.camera).then((file){
+                              if(file == null) return;
+                              setState((){
+                                _editedContact?.img = file.path;
+                              });
+                            });
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: FlatButton(
+                          child: Text("Galeria",
+                            style: TextStyle(color: Colors.blue, fontSize: 20.0),
+                          ),
+                          onPressed: (){
+                            Navigator.pop(context);
+                            ImagePicker().pickImage(source: ImageSource.gallery).then((file){
+                              if(file == null) return;
+                              setState((){
+                                _editedContact?.img = file.path;
+                              });
+                            });
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: FlatButton(
+                          child: Text("Cancelar",
+                            style: TextStyle(color: Colors.red, fontSize: 20.0),
+                          ),
+                          onPressed: (){
+                            Navigator.pop(context);
+
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+          );
+        }
+    );
+  }
+
 }
