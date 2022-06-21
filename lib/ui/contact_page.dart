@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:agenda_contatos/widgets/botao_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/contact_helper.dart';
@@ -9,7 +10,7 @@ class ContactPage extends StatefulWidget {
 
   final Contact? contact;
 
-  const ContactPage({this.contact});
+  const ContactPage({Key? key, this.contact}) : super(key: key);
 
 
 
@@ -63,11 +64,11 @@ class _ContactPageState extends State<ContactPage> {
 
                 }
               } ,
-              child: Icon(Icons.save),
               backgroundColor: Colors.red,
+              child: const Icon(Icons.save),
             ),
             body: SingleChildScrollView(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
                   GestureDetector(
@@ -91,7 +92,7 @@ class _ContactPageState extends State<ContactPage> {
                   TextField(
                     controller: _nameController,
                     focusNode: _nameFocus,
-                    decoration: InputDecoration(labelText: "Nome"),
+                    decoration: const InputDecoration(labelText: "Nome"),
                     onChanged: (text){
                       _userEdited = true;
                       setState((){
@@ -101,7 +102,7 @@ class _ContactPageState extends State<ContactPage> {
                   ),
                   TextField(
                     controller: _emailController,
-                    decoration: InputDecoration(labelText: "Email"),
+                    decoration: const InputDecoration(labelText: "Email"),
                     onChanged: (text){
                       _userEdited = true;
                       _editedContact!.email = text;
@@ -110,7 +111,7 @@ class _ContactPageState extends State<ContactPage> {
                   ),
                   TextField(
                     controller: _phoneController,
-                    decoration: InputDecoration(labelText: "Phone"),
+                    decoration: const InputDecoration(labelText: "Phone"),
                     onChanged: (text){
                       _userEdited = true;
                       _editedContact!.phone = text;
@@ -131,22 +132,16 @@ class _ContactPageState extends State<ContactPage> {
       showDialog(context: context,
           builder: (context){
             return AlertDialog(
-              title: Text("Descartar Alterações?"),
-              content: Text("Se sair as alterações serão perdidas."),
-              actions: [FlatButton(
-              child: Text("Cancelar"),
-                onPressed: (){
-                 Navigator.pop(context);
-                },
-            ),
-                FlatButton(
-                    child: Text("Sim"),
-                  onPressed: (){
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                  },
-
-                ),
+              title: const Text("Descartar Alterações?"),
+              content: const Text("Se sair as alterações serão perdidas."),
+              actions: [
+                botaoWidget("Cancelar", () {
+                  Navigator.pop(context);
+                }),
+                botaoWidget("Sim", () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                })
             ]
             );
           }
@@ -165,55 +160,39 @@ class _ContactPageState extends State<ContactPage> {
               onClosing: (){},
               builder: (context){
                 return Container(
-                  padding: EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: FlatButton(
-                          child: const Text("Câmera",
-                            style: TextStyle(color: Colors.blue, fontSize: 20.0),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            ImagePicker().pickImage(source: ImageSource.camera).then((file){
-                              if(file == null) return;
-                              setState((){
-                                _editedContact?.img = file.path;
-                              });
+                        padding: const EdgeInsets.all(10.0),
+                        child: botaoWidget("Câmera", () {
+                          Navigator.pop(context);
+                          ImagePicker().pickImage(source: ImageSource.camera).then((file){
+                            if(file == null) return;
+                            setState((){
+                              _editedContact?.img = file.path;
                             });
-                          },
-                        ),
+                          });
+                        })
                       ),
                       Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: FlatButton(
-                          child: Text("Galeria",
-                            style: TextStyle(color: Colors.blue, fontSize: 20.0),
-                          ),
-                          onPressed: (){
-                            Navigator.pop(context);
-                            ImagePicker().pickImage(source: ImageSource.gallery).then((file){
-                              if(file == null) return;
-                              setState((){
-                                _editedContact?.img = file.path;
-                              });
+                        padding: const EdgeInsets.all(10.0),
+                        child: botaoWidget("Galeria", () {
+                          Navigator.pop(context);
+                          ImagePicker().pickImage(source: ImageSource.gallery).then((file){
+                            if(file == null) return;
+                            setState((){
+                              _editedContact?.img = file.path;
                             });
-                          },
-                        ),
+                          });
+                        })
                       ),
                       Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: FlatButton(
-                          child: Text("Cancelar",
-                            style: TextStyle(color: Colors.red, fontSize: 20.0),
-                          ),
-                          onPressed: (){
-                            Navigator.pop(context);
-
-                          },
-                        ),
+                        padding: const EdgeInsets.all(10.0),
+                        child: botaoWidget("Cancelar", () {
+                          Navigator.pop(context);
+                        }),
                       ),
                     ],
                   ),
